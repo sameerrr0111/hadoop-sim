@@ -1,0 +1,38 @@
+services:
+  master:
+    build: .
+    container_name: master
+    command: python -u master.py
+    depends_on:
+      - worker1
+      - worker2
+    networks:
+      - hadoop_net
+    volumes:
+      - ./:/app
+
+  worker1:
+    build: .
+    container_name: worker1
+    command: python -u worker.py
+    environment:
+      - WORKER_NAME=Worker1
+    networks:
+      - hadoop_net
+    volumes:
+      - ./:/app
+
+  worker2:
+    build: .
+    container_name: worker2
+    command: python -u worker.py
+    environment:
+      - WORKER_NAME=Worker2
+    networks:
+      - hadoop_net
+    volumes:
+      - ./:/app
+
+networks:
+  hadoop_net:
+    driver: bridge
